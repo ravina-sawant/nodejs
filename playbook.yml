@@ -3,13 +3,13 @@
   hosts: docker_host
   become: true
   vars:
-    github_repo: "https://github.com/shubhamdhole97/nodejs.git"  # Change to your repo
+    github_repo: "https://github.com/ravina-sawant/nodejs.git"  # Change to your repo
     clone_path: "/home/ubuntu/nodejsapplication"  # Where repo will be cloned
-    image_name: shubhamdhole97/nodejs
+    image_name: ravina1996/nodejs
     image_tag: latest
     container_name: nodejscontainer
-    dockerhub_username: "shubhamdhole97"
-    dockerhub_password: "Docker123"  # Use Ansible Vault instead for security!
+    dockerhub_username: "ravina1996"
+    dockerhub_password: "ravina123"  # Use Ansible Vault instead for security!
   tasks:
 
     - name: Install Git (if not installed)
