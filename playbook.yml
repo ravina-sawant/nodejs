@@ -4,8 +4,8 @@
   become: true
   vars:
     github_repo: "https://github.com/ravina-sawant/nodejs.git"  # Change to your repo
-    clone_path: "/home/ubuntu/nodejssssssssra"  # Where repo will be cloned
-    image_name: ravina96/nodejss
+    clone_path: "/home/ubuntu/nodejsss"  # Where repo will be cloned
+    image_name: ravina96/nodejs
     image_tag: latest
     container_name: nodejs
     dockerhub_username: "ravina1996"
