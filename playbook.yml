@@ -4,12 +4,12 @@
   become: true
   vars:
     github_repo: "https://github.com/ravina-sawant/nodejs.git"  # Change to your repo
-    clone_path: "/home/ubuntu/nodejssssssssra"  # Where repo will be cloned
-    image_name: ravina96/nodejsssss
+    clone_path: "/home/ubuntu/nodejs"  # Where repo will be cloned
+    image_name: ravina96/nodejs
     image_tag: latest
     container_name: nodejs
-    dockerhub_username: "shubhamdhole97"
-    dockerhub_password: "Shubham@123"  # Use Ansible Vault instead for security!
+    dockerhub_username: "ravina1996"
+    dockerhub_password: "ravina123"  # Use Ansible Vault instead for security!
   tasks:
 
     - name: Install Git (if not installed)
