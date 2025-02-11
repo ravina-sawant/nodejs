@@ -3,13 +3,19 @@
   hosts: docker_host
   become: true
   vars:
-    github_repo: "https://github.com/ravina-sawant/nodejs.git"
+    github_repo: "https://github.com/ravina-sawant/nodejs.git"  
     clone_path: "/home/ubuntu/nodejs"
-    image_name: ravina96/nodejs
+    image_name: ravina96/nodejsapp
     image_tag: latest  # Fixed typo
-    container_name: nodejs
+    container_name: nodejsappli
     dockerhub_username: "ravina1996"
-    dockerhub_password: "ravina123"  # Hardcoded password (Not secure)
+    dockerhub_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          63656264363738616433363333303530353266633266646563666661363136373031333038323535
+          3661636333666636353366366635633962343135373566660a613739366239343731326333663034
+          66376639356537323136396364313562383033356465393235333738633264323933393831663435
+          3033633363663263660a333036333533336265363564383136303535343139633961653761393734
+          6332
 
   tasks:
 
