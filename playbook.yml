@@ -3,13 +3,14 @@
   hosts: docker_host
   become: true
   vars:
-    github_repo: "https://github.com/ravina-sawant/nodejs.git"  # Change to your repo
-    clone_path: "/home/ubuntu/nodejs"  # Where repo will be cloned
+    github_repo: "https://github.com/ravina-sawant/nodejs.git"
+    clone_path: "/home/ubuntu/nodejs"
     image_name: ravina96/nodejs
-    image_tag: latests
+    image_tag: latest  # Fixed typo
     container_name: nodejs
     dockerhub_username: "ravina1996"
-    dockerhub_password: "ravina123"  # Use Ansible Vault instead for security!
+    dockerhub_password: "ravina123"  # Hardcoded password (Not secure)
+
   tasks:
 
     - name: Install Git (if not installed)
@@ -21,13 +22,19 @@
       git:
         repo: "{{ github_repo }}"
         dest: "{{ clone_path }}"
-        version: main  # Change branch if necessary
-        force: yes  # Overwrites existing content
+        version: main
+        force: yes  
 
     - name: Log in to Docker Hub
       docker_login:
         username: "{{ dockerhub_username }}"
         password: "{{ dockerhub_password }}"
+      register: login_result
+
+    - name: Fail if Docker login unsuccessful
+      fail:
+        msg: "Docker login failed. Check credentials."
+      when: login_result.failed is defined and login_result.failed
 
     - name: Build Docker image from cloned repository
       docker_image:
@@ -39,22 +46,11 @@
         push: no
       register: build_result
 
-    - name: Tag the image
-      command: docker tag {{ image_name }}:{{ image_tag }} {{ image_name }}:{{ image_tag }}
-      when: build_result.changed
-
     - name: Push Docker image to Docker Hub
       command: docker push {{ image_name }}:{{ image_tag }}
+      when: build_result.changed
 
-
-    - name: Stop existing container (if any)
-      docker_container:
-        name: "{{ container_name }}"
-        state: stopped
-        force_kill: true
-      ignore_errors: yes
-
-    - name: Remove existing container (if any)
+    - name: Stop and remove existing container (if any)
       docker_container:
         name: "{{ container_name }}"
         state: absent
