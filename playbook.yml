@@ -9,7 +9,7 @@
     image_tag: latest
     container_name: nodejs
     dockerhub_username: "ravina1996"
-    dockerhub_password: "Ravina@123"  # Use Ansible Vault instead for security!
+    dockerhub_password: "ravina123"  # Use Ansible Vault instead for security!
   tasks:
 
     - name: Install Git (if not installed)
