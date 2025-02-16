@@ -5,8 +5,8 @@
     - secrets.yml  # Load encrypted variables
   vars:
     github_repo: "https://github.com/ravina-sawant/nodejs.git"
-    clone_path: "/home/ubuntu/nodejsapplication"
-    image_name: ravina96/nodejss
+    clone_path: "/home/ubuntu/nodejsapplicationaahe"
+    image_name: ravina1996/nodejss
     image_tag: latest
     container_name: nodejs
     dockerhub_username: "ravina1996"
