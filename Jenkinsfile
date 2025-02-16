@@ -7,15 +7,26 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Run Anssible Playbook') {
+        stage('Run Ansible Playbook') {
             steps {
-                withCredentials([sshUserPrivateKey(
-                    credentialsId: 'jenkins',
-                    keyFileVariable: 'SSH_KEY'
-                )]) {
+                withCredentials([
+                    sshUserPrivateKey(
+                        credentialsId: 'jenkins',
+                        keyFileVariable: 'SSH_KEY'
+                    ),
+                    string(
+                        credentialsId: 'ansible-vault-pass',
+                        variable: 'VAULT_PASS'
+                    )
+                ]) {
                     sh '''
+                        echo "$VAULT_PASS" > vault_pass.txt
+                        chmod 600 vault_pass.txt
+                        
                         ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini playbook.yml \
-                          -u ubuntu --private-key $SSH_KEY
+                          -u ubuntu --private-key $SSH_KEY --vault-password-file vault_pass.txt
+
+                        rm -f vault_pass.txt
                     '''
                 }
             }
