@@ -3,20 +3,13 @@
   hosts: docker_host
   become: true
   vars:
-    github_repo: "https://github.com/ravina-sawant/nodejs.git"  
-    clone_path: "/home/ubuntu/nodejs"
-    image_name: ravina96/nodejsapp
-    image_tag: latest  # Fixed typo
-    container_name: nodejsappli
-    dockerhub_username: "ravina1996"
-    dockerhub_password: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
-          63656264363738616433363333303530353266633266646563666661363136373031333038323535
-          3661636333666636353366366635633962343135373566660a613739366239343731326333663034
-          66376639356537323136396364313562383033356465393235333738633264323933393831663435
-          3033633363663263660a333036333533336265363564383136303535343139633961653761393734
-          6332
-
+    github_repo: "https://github.com/shubhamdhole97/nodejs.git"  # Change to your repo
+    clone_path: "/home/ubuntu/nodejssssssssra"  # Where repo will be cloned
+    image_name: shubhamdhole97/nodejss
+    image_tag: latest
+    container_name: nodejs
+    dockerhub_username: "shubhamdhole97"
+    dockerhub_password: "Shubham@111"  # Use Ansible Vault instead for security!
   tasks:
 
     - name: Install Git (if not installed)
@@ -28,19 +21,13 @@
       git:
         repo: "{{ github_repo }}"
         dest: "{{ clone_path }}"
-        version: main
-        force: yes  
+        version: main  # Change branch if necessary
+        force: yes  # Overwrites existing content
 
     - name: Log in to Docker Hub
       docker_login:
         username: "{{ dockerhub_username }}"
         password: "{{ dockerhub_password }}"
-      register: login_result
-
-    - name: Fail if Docker login unsuccessful
-      fail:
-        msg: "Docker login failed. Check credentials."
-      when: login_result.failed is defined and login_result.failed
 
     - name: Build Docker image from cloned repository
       docker_image:
@@ -52,11 +39,22 @@
         push: no
       register: build_result
 
-    - name: Push Docker image to Docker Hub
-      command: docker push {{ image_name }}:{{ image_tag }}
+    - name: Tag the image
+      command: docker tag {{ image_name }}:{{ image_tag }} {{ image_name }}:{{ image_tag }}
       when: build_result.changed
 
-    - name: Stop and remove existing container (if any)
+    - name: Push Docker image to Docker Hub
+      command: docker push {{ image_name }}:{{ image_tag }}
+
+
+    - name: Stop existing container (if any)
+      docker_container:
+        name: "{{ container_name }}"
+        state: stopped
+        force_kill: true
+      ignore_errors: yes
+
+    - name: Remove existing container (if any)
       docker_container:
         name: "{{ container_name }}"
         state: absent
