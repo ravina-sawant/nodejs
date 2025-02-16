@@ -7,7 +7,7 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Run Ansible Playbook') {
+        stage('Run Anssible Playbook') {
             steps {
                 withCredentials([sshUserPrivateKey(
                     credentialsId: 'jenkins',
